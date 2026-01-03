@@ -1,3 +1,59 @@
+# Class-Lib
+
+A small React + Vite project showing a simple class library UI with pages for library books and students.
+
+## Quick Start
+
+Prerequisites: Node.js (v16+) and npm.
+
+Install dependencies:
+
+```
+npm install
+```
+
+Run the dev server:
+
+```
+npm run dev
+```
+
+Build for production:
+
+```
+npm run build
+```
+
+Preview the production build locally:
+
+```
+npm run preview
+```
+
+## Project Structure
+
+- `index.html` — app entry
+- `vite.config.js` — Vite config
+- `package.json` — scripts & deps
+- `src/` — React source
+  - `components/` — UI components (BookCard, StudentCard, Card)
+  - `pages/` — page components (Library, Students)
+  - `App.jsx`, `main.jsx` — app bootstrap
+
+## Scripts
+
+- `dev`: Start Vite dev server
+- `build`: Create production build
+- `preview`: Serve production build locally
+- `lint`: Run ESLint
+
+## Contributing
+
+PRs welcome — keep changes small and focused. Run `npm run lint` before submitting.
+
+## License
+
+MIT-style (check repository owner for specifics).
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
