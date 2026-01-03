@@ -1,0 +1,31 @@
+import React from 'react';
+import Card from './Card';
+
+const BookCard = ({ book, onToggle }) => {
+  return (
+    <Card className={`book-card ${book.isCheckedOut ? 'checked-out' : 'available'}`}>
+      <div className="card-content">
+        <h3>{book.title}</h3>
+        <p className="author">by {book.author}</p>
+        
+        <div className="details">
+          <span className="badge genre">{book.genre}</span>
+          <span className="isbn">ISBN: {book.isbn}</span>
+        </div>
+
+        {book.isCheckedOut && (
+          <p className="status-msg">Checked out by: <strong>{book.studentName}</strong></p>
+        )}
+      </div>
+
+      <button 
+        className="action-btn" 
+        onClick={onToggle}
+      >
+        {book.isCheckedOut ? "Return Book" : "Check Out"}
+      </button>
+    </Card>
+  );
+};
+
+export default BookCard;
