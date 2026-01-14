@@ -3,48 +3,19 @@ import { Routes, Route, NavLink, Navigate } from 'react-router-dom';
 import Library from './pages/Library';
 import Students from './pages/Students';
 import './App.css'; 
+import initialBooks from './data/books.json';
+import initialStudentClassMap from './data/students.json';
 
 const App = () => {
   // 1. Initial State with ISBN included
-  const [books, setBooks] = useState([
-    {
-      id: 1,
-      title: "Harry Potter and the Sorcerer's Stone",
-      author: "J.K. Rowling",
-      isbn: "978-0590353427",
-      genre: "Fantasy",
-      isCheckedOut: true,
-      studentName: "John Doe" 
-    },
-    {
-      id: 2,
-      title: "The Very Hungry Caterpillar",
-      author: "Eric Carle",
-      isbn: "978-0399226908",
-      genre: "Picture Book",
-      isCheckedOut: true,
-      studentName: "Liam Hendricks"
-    },
-    {
-      id: 3,
-      title: "Charlotte's Web",
-      author: "E.B. White",
-      isbn: "978-0064400558",
-      genre: "Classic",
-      isCheckedOut: true,
-      studentName: "John Doe"
-    }
-  ]);
+  const [books, setBooks] = useState(initialBooks);
 
   // Student Class ID mapping
-  const [studentClassMap, setStudentClassMap] = useState({
-    "Liam Hendricks": "STU-001",
-    "John Doe": "STU-002",
-    "Jane Smith": "STU-003",
-    "Jim Beam": "STU-004",
-    "Jill Johnson": "STU-005",
-    "Jack Daniels": "STU-006"
-  });
+  const [studentClassMap, setStudentClassMap] = useState(initialStudentClassMap);
+
+  // Student checkout history:
+  // { [studentName]: Array<{ bookId, title, isbn, checkedOutAt, checkedInAt, durationMs }> }
+  const [studentHistory, setStudentHistory] = useState({});
 
   // Derive students from checked-out books
   const deriveStudents = () => {
@@ -62,7 +33,26 @@ const App = () => {
       }
       studentMap[studentName].books.push(book);
     });
-    
+
+    // Also include students who have history or are in the class map, even if they currently
+    // have no books checked out.
+    const allStudentNames = new Set([
+      ...Object.keys(studentClassMap || {}),
+      ...Object.keys(studentHistory || {}),
+      ...Object.keys(studentMap || {})
+    ]);
+
+    allStudentNames.forEach((name) => {
+      if (!studentMap[name]) {
+        studentMap[name] = {
+          name,
+          classId: studentClassMap[name] || null,
+          books: []
+        };
+      }
+      studentMap[name].history = studentHistory[name] || [];
+    });
+
     return Object.values(studentMap);
   };
 
@@ -70,6 +60,9 @@ const App = () => {
   const toggleCheckout = (id) => {
     setBooks(books.map(book => {
       if (book.id === id) {
+        const nowIso = new Date().toISOString();
+        const previousStudent = book.studentName;
+        const previousCheckedOutAt = book.checkedOutAt;
         // If it is currently checked out, we act as if we are returning it (remove student name)
         // If it is NOT checked out, we simulate a student taking it
         const newStatus = !book.isCheckedOut;
@@ -91,10 +84,37 @@ const App = () => {
           }
         }
 
+        // If we're returning a book, record a completed history entry for the previous student.
+        if (!newStatus && previousStudent) {
+          const checkedOutAtIso = previousCheckedOutAt || null;
+          const checkedInAtIso = nowIso;
+          const durationMs = checkedOutAtIso
+            ? (new Date(checkedInAtIso).getTime() - new Date(checkedOutAtIso).getTime())
+            : null;
+
+          setStudentHistory(prev => ({
+            ...prev,
+            [previousStudent]: [
+              ...(prev[previousStudent] || []),
+              {
+                bookId: book.id,
+                title: book.title,
+                isbn: book.isbn,
+                checkedOutAt: checkedOutAtIso,
+                checkedInAt: checkedInAtIso,
+                durationMs
+              }
+            ]
+          }));
+        }
+
         return { 
           ...book, 
           isCheckedOut: newStatus, 
-          studentName: newStudent 
+          studentName: newStudent,
+          // Tracking fields:
+          checkedOutAt: newStatus ? nowIso : (book.checkedOutAt || null),
+          checkedInAt: newStatus ? null : nowIso
         };
       }
       return book;

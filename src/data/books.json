@@ -1,0 +1,228 @@
+[
+  {
+    "id": 1,
+    "title": "Harry Potter and the Sorcerer's Stone",
+    "author": "J.K. Rowling",
+    "isbn": "978-0590353427",
+    "genre": "Fantasy",
+    "isCheckedOut": true,
+    "studentName": "John Doe"
+  },
+  {
+    "id": 2,
+    "title": "The Very Hungry Caterpillar",
+    "author": "Eric Carle",
+    "isbn": "978-0399226908",
+    "genre": "Picture Book",
+    "isCheckedOut": true,
+    "studentName": "Liam Hendricks"
+  },
+  {
+    "id": 3,
+    "title": "Charlotte's Web",
+    "author": "E.B. White",
+    "isbn": "978-0064400558",
+    "genre": "Classic",
+    "isCheckedOut": true,
+    "studentName": "John Doe"
+  },
+  {
+    "id": 4,
+    "title": "Matilda",
+    "author": "Roald Dahl",
+    "isbn": "978-0142410370",
+    "genre": "Children's Fiction",
+    "isCheckedOut": false,
+    "studentName": ""
+  },
+  {
+    "id": 5,
+    "title": "The Lion, the Witch and the Wardrobe",
+    "author": "C.S. Lewis",
+    "isbn": "978-0064471046",
+    "genre": "Fantasy",
+    "isCheckedOut": true,
+    "studentName": "Jane Smith"
+  },
+  {
+    "id": 6,
+    "title": "Where the Wild Things Are",
+    "author": "Maurice Sendak",
+    "isbn": "978-0060254926",
+    "genre": "Picture Book",
+    "isCheckedOut": false,
+    "studentName": ""
+  },
+  {
+    "id": 7,
+    "title": "The Cat in the Hat",
+    "author": "Dr. Seuss",
+    "isbn": "978-0394800011",
+    "genre": "Picture Book",
+    "isCheckedOut": true,
+    "studentName": "Jill Johnson"
+  },
+  {
+    "id": 8,
+    "title": "Because of Winn-Dixie",
+    "author": "Kate DiCamillo",
+    "isbn": "978-0763680869",
+    "genre": "Children's Fiction",
+    "isCheckedOut": false,
+    "studentName": ""
+  },
+  {
+    "id": 9,
+    "title": "Holes",
+    "author": "Louis Sachar",
+    "isbn": "978-0440414803",
+    "genre": "Adventure",
+    "isCheckedOut": true,
+    "studentName": "Jim Beam"
+  },
+  {
+    "id": 10,
+    "title": "The Tale of Peter Rabbit",
+    "author": "Beatrix Potter",
+    "isbn": "978-0723247708",
+    "genre": "Picture Book",
+    "isCheckedOut": false,
+    "studentName": ""
+  },
+  {
+    "id": 11,
+    "title": "The Giver",
+    "author": "Lois Lowry",
+    "isbn": "978-0544336261",
+    "genre": "Dystopian",
+    "isCheckedOut": true,
+    "studentName": "Jack Daniels"
+  },
+  {
+    "id": 12,
+    "title": "Diary of a Wimpy Kid",
+    "author": "Jeff Kinney",
+    "isbn": "978-1419749154",
+    "genre": "Humor",
+    "isCheckedOut": false,
+    "studentName": ""
+  },
+  {
+    "id": 13,
+    "title": "The One and Only Ivan",
+    "author": "Katherine Applegate",
+    "isbn": "978-0061992278",
+    "genre": "Children's Fiction",
+    "isCheckedOut": true,
+    "studentName": "Ava Martinez"
+  },
+  {
+    "id": 14,
+    "title": "Wonder",
+    "author": "R.J. Palacio",
+    "isbn": "978-0375869020",
+    "genre": "Children's Fiction",
+    "isCheckedOut": false,
+    "studentName": ""
+  },
+  {
+    "id": 15,
+    "title": "Bridge to Terabithia",
+    "author": "Katherine Paterson",
+    "isbn": "978-0064401845",
+    "genre": "Classic",
+    "isCheckedOut": true,
+    "studentName": "Noah Johnson"
+  },
+  {
+    "id": 16,
+    "title": "A Wrinkle in Time",
+    "author": "Madeleine L'Engle",
+    "isbn": "978-0312367541",
+    "genre": "Science Fiction",
+    "isCheckedOut": false,
+    "studentName": ""
+  },
+  {
+    "id": 17,
+    "title": "The Magic Tree House: Dinosaurs Before Dark",
+    "author": "Mary Pope Osborne",
+    "isbn": "978-0679824114",
+    "genre": "Adventure",
+    "isCheckedOut": true,
+    "studentName": "Emma Williams"
+  },
+  {
+    "id": 18,
+    "title": "Junie B. Jones and the Stupid Smelly Bus",
+    "author": "Barbara Park",
+    "isbn": "978-0679826422",
+    "genre": "Humor",
+    "isCheckedOut": false,
+    "studentName": ""
+  },
+  {
+    "id": 19,
+    "title": "The Phantom Tollbooth",
+    "author": "Norton Juster",
+    "isbn": "978-0394820378",
+    "genre": "Fantasy",
+    "isCheckedOut": true,
+    "studentName": "Liam Nguyen"
+  },
+  {
+    "id": 20,
+    "title": "The School Story",
+    "author": "Andrew Clements",
+    "isbn": "978-0689833147",
+    "genre": "Children's Fiction",
+    "isCheckedOut": false,
+    "studentName": ""
+  },
+  {
+    "id": 21,
+    "title": "Stuart Little",
+    "author": "E.B. White",
+    "isbn": "978-0064401968",
+    "genre": "Classic",
+    "isCheckedOut": true,
+    "studentName": "Olivia Brown"
+  },
+  {
+    "id": 22,
+    "title": "The Mouse and the Motorcycle",
+    "author": "Beverly Cleary",
+    "isbn": "978-0380709243",
+    "genre": "Classic",
+    "isCheckedOut": false,
+    "studentName": ""
+  },
+  {
+    "id": 23,
+    "title": "The Wild Robot",
+    "author": "Peter Brown",
+    "isbn": "978-0316381994",
+    "genre": "Science Fiction",
+    "isCheckedOut": true,
+    "studentName": "Elijah Davis"
+  },
+  {
+    "id": 24,
+    "title": "The Polar Express",
+    "author": "Chris Van Allsburg",
+    "isbn": "978-0544589223",
+    "genre": "Picture Book",
+    "isCheckedOut": false,
+    "studentName": ""
+  },
+  {
+    "id": 25,
+    "title": "The Boxcar Children",
+    "author": "Gertrude Chandler Warner",
+    "isbn": "978-0807508527",
+    "genre": "Mystery",
+    "isCheckedOut": true,
+    "studentName": "Sophia Wilson"
+  }
+]
+

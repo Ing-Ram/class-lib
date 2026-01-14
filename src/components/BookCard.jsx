@@ -2,6 +2,13 @@ import React from 'react';
 import Card from './Card';
 
 const BookCard = ({ book, onToggle }) => {
+  const formatDateTime = (isoString) => {
+    if (!isoString) return '';
+    const d = new Date(isoString);
+    if (Number.isNaN(d.getTime())) return '';
+    return d.toLocaleString();
+  };
+
   return (
     <Card className={`book-card ${book.isCheckedOut ? 'checked-out' : 'available'}`}>
       <div className="card-content">
@@ -15,6 +22,18 @@ const BookCard = ({ book, onToggle }) => {
 
         {book.isCheckedOut && (
           <p className="status-msg">Checked out by: <strong>{book.studentName}</strong></p>
+        )}
+
+        {book.checkedOutAt && (
+          <p className="status-msg">
+            Checked out at: <strong>{formatDateTime(book.checkedOutAt)}</strong>
+          </p>
+        )}
+
+        {book.checkedInAt && (
+          <p className="status-msg">
+            Last returned at: <strong>{formatDateTime(book.checkedInAt)}</strong>
+          </p>
         )}
       </div>
 
