@@ -7,7 +7,7 @@
 - **Track inventory**: Maintain a catalog of classroom books (title, author, genre, ISBN).
 - **Monitor borrowing**: See which books are currently checked out and by which student.
 - **Understand reading behavior**: Keep a history of what each student has borrowed and for how long, supporting conversations about reading habits and responsibility.
-- **Be easy to run**: Use a modern web UI (React) with a lightweight backend and a MySQL database that can be run locally via Docker.
+- **Be easy to run**: Use a modern web UI (React) with a lightweight backend and a MySQL database running locally.
 
 ### Key Users
 
@@ -40,7 +40,7 @@
 
 ### Data and Persistence
 
-- **Database**: MySQL (run via Docker for convenience and portability).
+- **Database**: MySQL (installed locally, providing persistent storage).
 - **Main entities**:
   - **Students** – name and class ID.
   - **Books** – catalog of titles and their current checkout status.

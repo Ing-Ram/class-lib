@@ -1,7 +1,7 @@
 import React from 'react';
 import StudentCard from '../components/StudentCard';
 
-const Students = ({ students }) => {
+const Students = ({ students = [] }) => {
   return (
     <div>
       <header className="library-header">

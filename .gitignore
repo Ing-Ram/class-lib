@@ -11,7 +11,11 @@ node_modules
 dist
 dist-ssr
 README.Docker.md
+QUICKFIX.md
+TROUBLESHOOTING.md
 *.local
+*.env
+.env.*.local
 
 # Editor directories and files
 .vscode/*

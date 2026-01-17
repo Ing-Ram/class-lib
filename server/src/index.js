@@ -258,6 +258,26 @@ app.post("/api/books/:id/return", async (req, res) => {
   }
 });
 
+// Test database connection on startup
+pool.query("SELECT 1")
+  .then(() => {
+    // eslint-disable-next-line no-console
+    console.log("Database connected successfully");
+  })
+  .catch((err) => {
+    // eslint-disable-next-line no-console
+    console.error("Database connection failed:", err.message);
+    // eslint-disable-next-line no-console
+    console.error("Make sure:");
+    // eslint-disable-next-line no-console
+    console.error("  1. MySQL is running");
+    // eslint-disable-next-line no-console
+    console.error("  2. Database 'class_lib' exists (run schema.sql)");
+    // eslint-disable-next-line no-console
+    console.error("  3. server/.env has correct credentials");
+    process.exit(1);
+  });
+
 const port = Number(process.env.PORT || 5174);
 app.listen(port, () => {
   // eslint-disable-next-line no-console

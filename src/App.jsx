@@ -19,10 +19,13 @@ const App = () => {
         getBooks(),
         getStudents()
       ]);
-      setBooks(booksData);
-      setStudents(studentsData);
+      setBooks(booksData || []);
+      setStudents(studentsData || []);
     } catch (e) {
-      setError(e?.message || 'Failed to load data');
+      const errorMsg = e?.message || 'Failed to load data';
+      setError(`Error: ${errorMsg}. Make sure the backend server is running on port 5174.`);
+      // eslint-disable-next-line no-console
+      console.error('Failed to load data:', e);
     } finally {
       setLoading(false);
     }

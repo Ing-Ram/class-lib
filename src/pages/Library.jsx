@@ -1,7 +1,7 @@
 import React from 'react';
 import BookCard from '../components/BookCard';
 
-const Library = ({ books, onToggleCheckout }) => {
+const Library = ({ books = [], onToggleCheckout }) => {
   return (
     <div>
       <header className="library-header">
@@ -9,15 +9,22 @@ const Library = ({ books, onToggleCheckout }) => {
         <p>Total Books: {books.length} | Checked Out: {books.filter(b => b.isCheckedOut).length}</p>
       </header>
 
-      <div className="book-grid">
-        {books.map(book => (
-          <BookCard 
-            key={book.id} 
-            book={book} 
-            onToggle={() => onToggleCheckout(book.id)} 
-          />
-        ))}
-      </div>
+      {books.length === 0 ? (
+        <div className="empty-state">
+          <p>No books found. Make sure the database is seeded with data.</p>
+          <p>Run: <code>npm run server:seed</code></p>
+        </div>
+      ) : (
+        <div className="book-grid">
+          {books.map(book => (
+            <BookCard 
+              key={book.id} 
+              book={book} 
+              onToggle={() => onToggleCheckout(book.id)} 
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
