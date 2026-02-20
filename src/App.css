@@ -3,12 +3,13 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   background-color: #b1b1e7;
   margin: 0;
+  padding: 20px 24px;
 }
 
 .app-container {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0;
 }
 
 /* Navigation */
