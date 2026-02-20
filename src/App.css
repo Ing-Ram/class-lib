@@ -45,6 +45,12 @@ body {
   color: white;
 }
 
+.seed-csv-btn {
+  cursor: pointer;
+  border: none;
+  font: inherit;
+}
+
 .library-header {
   text-align: center;
   margin-bottom: 30px;

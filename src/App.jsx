@@ -3,13 +3,15 @@ import { Routes, Route, NavLink, Navigate } from 'react-router-dom';
 import Library from './pages/Library';
 import Students from './pages/Students';
 import './App.css'; 
-import { getBooks, getStudents, checkoutBook, returnBook } from './api';
+import { getBooks, getStudents, checkoutBook, returnBook, seedFromCsv } from './api';
 
 const App = () => {
   const [books, setBooks] = useState([]);
   const [students, setStudents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const fileInputRef = React.useRef(null);
+  const seedTypeRef = React.useRef("books");
 
   const loadData = async () => {
     setLoading(true);
@@ -34,6 +36,31 @@ const App = () => {
   useEffect(() => {
     loadData();
   }, []);
+
+  const handleSeedCsv = async (e) => {
+    const file = e?.target?.files?.[0];
+    if (!file) return;
+    const type = seedTypeRef.current;
+    try {
+      const result = await seedFromCsv(file, type);
+      const label = type === "students" ? "Students" : "Books";
+      const msg = `Seeded ${label}: ${result.inserted} inserted, ${result.updated} updated.` +
+        (result.errors?.length ? ` ${result.errors.length} row(s) had errors.` : "");
+      // eslint-disable-next-line no-alert
+      alert(msg);
+      await loadData();
+    } catch (err) {
+      // eslint-disable-next-line no-alert
+      alert(err?.message || "Seed failed");
+    } finally {
+      e.target.value = "";
+    }
+  };
+
+  const openSeedCsv = (type) => {
+    seedTypeRef.current = type;
+    fileInputRef.current?.click();
+  };
 
   // Toggle checkout status via API
   const toggleCheckout = async (id) => {
@@ -62,6 +89,27 @@ const App = () => {
       <nav className="main-nav">
         <NavLink to="/library" className="nav-link">📚 Library</NavLink>
         <NavLink to="/students" className="nav-link">👥 Students</NavLink>
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".csv"
+          style={{ display: "none" }}
+          onChange={handleSeedCsv}
+        />
+        <button
+          type="button"
+          className="nav-link seed-csv-btn"
+          onClick={() => openSeedCsv("books")}
+        >
+          📄 Seed books
+        </button>
+        <button
+          type="button"
+          className="nav-link seed-csv-btn"
+          onClick={() => openSeedCsv("students")}
+        >
+          👥 Seed students
+        </button>
       </nav>
 
       {loading && (

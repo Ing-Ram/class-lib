@@ -1,9 +1,13 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import multer from "multer";
+import { parse } from "csv-parse/sync";
 import { pool } from "./db.js";
 
 dotenv.config();
+
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 2 * 1024 * 1024 } }); // 2MB
 
 const app = express();
 app.use(express.json());
@@ -117,6 +121,107 @@ app.get("/api/students", async (_req, res) => {
   }));
 
   res.json(payload);
+});
+
+// Seed books or students from CSV. Form: csv (file), type (optional: "books" | "students", default "books")
+// Books CSV: id (optional), title, author, isbn, genre. Students CSV: name, class_id (optional).
+app.post("/api/seed/csv", upload.single("csv"), async (req, res) => {
+  if (!req.file || !req.file.buffer) {
+    return res.status(400).json({ error: "No CSV file uploaded. Use field name 'csv'." });
+  }
+  const type = (req.body?.type || "books").toLowerCase();
+  if (type !== "books" && type !== "students") {
+    return res.status(400).json({ error: "type must be 'books' or 'students'." });
+  }
+  let rows;
+  try {
+    const text = req.file.buffer.toString("utf8");
+    rows = parse(text, { columns: true, skip_empty_lines: true, trim: true });
+  } catch (e) {
+    return res.status(400).json({ error: `Invalid CSV: ${e?.message || e}` });
+  }
+  const errors = [];
+  const conn = await pool.getConnection();
+  try {
+    await conn.beginTransaction();
+    if (type === "students") {
+      let inserted = 0;
+      let updated = 0;
+      for (let i = 0; i < rows.length; i++) {
+        const row = rows[i];
+        const name = row.name?.trim();
+        if (!name) {
+          errors.push({ row: i + 2, message: "name is required" });
+          continue;
+        }
+        const classId = (row.class_id != null && row.class_id !== "" ? String(row.class_id).trim() : null) || null;
+        try {
+          const [result] = await conn.query(
+            `
+            INSERT INTO students (name, class_id)
+            VALUES (:name, :classId)
+            ON DUPLICATE KEY UPDATE class_id = COALESCE(VALUES(class_id), class_id)
+            `,
+            { name, classId }
+          );
+          if (result.affectedRows === 1) inserted++;
+          else if (result.affectedRows === 2) updated++;
+        } catch (err) {
+          errors.push({ row: i + 2, message: err?.message || String(err) });
+        }
+      }
+      await conn.commit();
+      return res.json({ ok: true, type: "students", inserted, updated, errors });
+    }
+    // type === "books"
+    let nextId = null;
+    if (rows.length > 0 && (rows[0].id === undefined || rows[0].id === "")) {
+      const [[r]] = await conn.query("SELECT COALESCE(MAX(id), 0) + 1 AS next FROM books");
+      nextId = r?.next ?? 1;
+    }
+    let inserted = 0;
+    let updated = 0;
+    for (let i = 0; i < rows.length; i++) {
+      const row = rows[i];
+      const title = row.title?.trim();
+      const author = row.author?.trim();
+      if (!title || !author) {
+        errors.push({ row: i + 2, message: "title and author are required" });
+        continue;
+      }
+      let id = row.id != null && row.id !== "" ? Number(row.id) : null;
+      if (id == null || Number.isNaN(id)) {
+        id = nextId++;
+      }
+      const isbn = (row.isbn != null && row.isbn !== "" ? String(row.isbn).trim() : null) || null;
+      const genre = (row.genre != null && row.genre !== "" ? String(row.genre).trim() : null) || null;
+      try {
+        const [result] = await conn.query(
+          `
+          INSERT INTO books (id, title, author, isbn, genre, is_checked_out, checked_out_by_student_id, checked_out_at, checked_in_at)
+          VALUES (:id, :title, :author, :isbn, :genre, 0, NULL, NULL, NULL)
+          ON DUPLICATE KEY UPDATE
+            title = VALUES(title),
+            author = VALUES(author),
+            isbn = VALUES(isbn),
+            genre = VALUES(genre)
+          `,
+          { id, title, author, isbn, genre }
+        );
+        if (result.affectedRows === 1) inserted++;
+        else if (result.affectedRows === 2) updated++;
+      } catch (err) {
+        errors.push({ row: i + 2, message: err?.message || String(err) });
+      }
+    }
+    await conn.commit();
+    res.json({ ok: true, type: "books", inserted, updated, errors });
+  } catch (e) {
+    await conn.rollback();
+    res.status(500).json({ error: String(e?.message || e) });
+  } finally {
+    conn.release();
+  }
 });
 
 app.post("/api/books/:id/checkout", async (req, res) => {
